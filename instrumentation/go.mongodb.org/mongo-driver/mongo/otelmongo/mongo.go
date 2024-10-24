@@ -34,14 +34,13 @@ func (m *monitor) Started(ctx context.Context, evt *event.CommandStartedEvent) {
 	var spanName string
 
 	hostname, port := peerInfo(evt)
-
 	attrs := []attribute.KeyValue{
 		semconv.DBSystemMongoDB,
 		semconv.DBOperation(evt.CommandName),
 		semconv.DBName(evt.DatabaseName),
-		semconv.NetPeerName(hostname), //nolint:staticcheck
-		semconv.NetPeerPort(port),     //nolint:staticcheck
-		semconv.NetTransportTCP,       //nolint:staticcheck
+		semconv.NetworkPeerAddress(hostname), // This makes no sense
+		semconv.NetworkPeerPort(port),
+		semconv.NetworkTransportTCP,
 	}
 	if !m.cfg.CommandAttributeDisabled {
 		attrs = append(attrs, semconv.DBStatement(sanitizeCommand(evt.Command)))
