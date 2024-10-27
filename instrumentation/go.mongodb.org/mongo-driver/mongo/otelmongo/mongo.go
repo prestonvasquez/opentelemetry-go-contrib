@@ -12,7 +12,7 @@ import (
 
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
-	semconv "go.opentelemetry.io/otel/semconv/v1.24.0"
+	semconv "go.opentelemetry.io/otel/semconv/v1.21.0"
 	"go.opentelemetry.io/otel/trace"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -38,9 +38,9 @@ func (m *monitor) Started(ctx context.Context, evt *event.CommandStartedEvent) {
 		semconv.DBSystemMongoDB,
 		semconv.DBOperation(evt.CommandName),
 		semconv.DBName(evt.DatabaseName),
-		semconv.NetworkPeerAddress(hostname), // This makes no sense
-		semconv.NetworkPeerPort(port),
-		semconv.NetworkTransportTCP,
+		semconv.NetPeerName(hostname),
+		semconv.NetPeerPort(port),
+		semconv.NetTransportTCP,
 	}
 	if !m.cfg.CommandAttributeDisabled {
 		attrs = append(attrs, semconv.DBStatement(sanitizeCommand(evt.Command)))
